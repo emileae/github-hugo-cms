@@ -1,0 +1,11 @@
+@font-face {
+   font-family: 'OpenSans';
+   src:  url('./OpenSans-Light.ttf') format('ttf');
+}
+
+.hello {
+  color: red;
+  background: url('./dragonball.gif');
+  font-family: OpenSans;
+  font-size: 24px;
+}
