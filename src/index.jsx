@@ -15,13 +15,13 @@ store.subscribe(()=> {
 // import injectTapEventPlugin from 'react-tap-event-plugin';
 // injectTapEventPlugin();
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import MyAwesomeReactComponent from './components/MyAwesomeReactComponent.jsx';
+import Login from './components/Login.jsx';
 
 const title = 'My Minimal React Webpack Babel Setup';
 
 const App = () => (
   <MuiThemeProvider>
-    <MyAwesomeReactComponent />
+    <Login />
   </MuiThemeProvider>
 );
 
