@@ -1,6 +1,6 @@
 import React from 'react';
 import RaisedButton from 'material-ui/RaisedButton';
-import AppBar from 'material-ui/AppBar';
+// import AppBar from 'material-ui/AppBar';
 
 // get redux connect
 var {connect} = require('react-redux');
@@ -131,10 +131,6 @@ class Login extends React.Component {
     console.log("props: ", this.props);
     return (
       <div>
-        <AppBar
-        title="Title"
-        iconClassNameRight="muidocs-icon-navigation-expand-more"
-        />
       <RaisedButton label="Github Login" onClick={this.githubLogin(this.props)} />
         <br></br>
         <RaisedButton label="Test Github API" onClick={testGithubAPI} />

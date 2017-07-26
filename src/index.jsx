@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 var {Provider} = require('react-redux');
+import { HashRouter } from 'react-router-dom';// use HashRouter since this is a static site, browserrouter is for server rendered sites
 
 var actions = require('actions');
 var store = require('configureStore').configure();// call the redux store...
@@ -15,19 +16,21 @@ store.subscribe(()=> {
 // import injectTapEventPlugin from 'react-tap-event-plugin';
 // injectTapEventPlugin();
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import Login from './components/Login.jsx';
+import Home from './components/Home.jsx';
 
 const title = 'My Minimal React Webpack Babel Setup';
 
 const App = () => (
   <MuiThemeProvider>
-    <Login />
+    <Home />
   </MuiThemeProvider>
 );
 
 ReactDOM.render(
   <Provider store={store}>
-    <App />
+    <HashRouter>
+      <App />
+    </HashRouter>
   </Provider>,
   document.getElementById('app')
 );

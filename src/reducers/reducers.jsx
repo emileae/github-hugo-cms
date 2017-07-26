@@ -5,4 +5,13 @@ export var authTokenReducer = (state = '', action) => {
     default:
       return state;
   }
+};
+
+export var toggleDrawerReducer = (state = false, action) => {
+  switch (action.type) {
+    case 'TOGGLE_DRAWER':
+      return action.drawer;
+    default:
+      return state;
+  }
 }

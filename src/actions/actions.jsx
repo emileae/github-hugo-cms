@@ -6,3 +6,12 @@ export var setAuthToken = (token) => {
   }
 
 };
+
+export var toggleDrawer = (drawer) => {
+
+  return {
+    type: 'TOGGLE_DRAWER',
+    drawer: true
+  }
+
+};
