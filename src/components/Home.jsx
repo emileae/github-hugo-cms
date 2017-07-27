@@ -2,6 +2,8 @@ import React from 'react';
 
 // get redux connect
 var {connect} = require('react-redux');
+var store = require('configureStore').configure();// call the redux store...
+var actions = require('actions');
 
 import AppBar from 'material-ui/AppBar';
 import Drawer from 'material-ui/Drawer';
@@ -15,10 +17,10 @@ class Home extends React.Component {
     super(props);
   }
 
-  toggleDrawer () {
+  toggleDrawer (props) {
     var {dispatch} = props;
     console.log("dispatch: ", dispatch);
-    dispatch(actions.toggleDrawer(this.state.drawer));
+    dispatch(actions.toggleDrawer(store.getState().drawer));
   }
 
   render() {
@@ -29,7 +31,7 @@ class Home extends React.Component {
         iconClassNameRight="muidocs-icon-navigation-expand-more"
         onLeftIconButtonTouchTap={this.toggleDrawer}
         />
-        <Drawer open={this.state.drawer}>
+      <Drawer open={store.getState().drawer}>
           <MenuItem>Menu Item</MenuItem>
           <MenuItem>Menu Item 2</MenuItem>
         </Drawer>

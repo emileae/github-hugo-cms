@@ -13,8 +13,8 @@ store.subscribe(()=> {
 // store.dispatch(actions.setAuthToken('asdfghgfdsfdgfhggf'));
 
 // material-ui
-// import injectTapEventPlugin from 'react-tap-event-plugin';
-// injectTapEventPlugin();
+import injectTapEventPlugin from 'react-tap-event-plugin';
+injectTapEventPlugin();
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import Home from './components/Home.jsx';
 
