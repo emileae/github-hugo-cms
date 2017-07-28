@@ -12,6 +12,7 @@ export var configure = () => {
     window.devToolsExtension ? window.devToolsExtension() : f => f
   ));
 
+
   return store;
 
 };

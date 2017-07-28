@@ -19,7 +19,8 @@ class Home extends React.Component {
 
   toggleDrawer (props) {
     var {dispatch} = props;
-    console.log("dispatch: ", dispatch);
+    console.log("props....", props);
+    console.log("dispatch....", dispatch);
     dispatch(actions.toggleDrawer(store.getState().drawer));
   }
 
@@ -31,14 +32,14 @@ class Home extends React.Component {
         iconClassNameRight="muidocs-icon-navigation-expand-more"
         onLeftIconButtonTouchTap={this.toggleDrawer}
         />
-      <Drawer open={store.getState().drawer}>
-          <MenuItem>Menu Item</MenuItem>
-          <MenuItem>Menu Item 2</MenuItem>
-        </Drawer>
-      <Login/>
+        <Drawer open={store.getState().drawer}>
+            <MenuItem>Menu Item</MenuItem>
+            <MenuItem>Menu Item 2</MenuItem>
+          </Drawer>
+        <Login/>
       </div>
     )
   }
 }
 
-export default connect()(Home);
+export default connect(state => state, dispatch => ({ dispatch }))(Home);
