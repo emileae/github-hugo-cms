@@ -11572,10 +11572,10 @@ var setAuthToken = exports.setAuthToken = function setAuthToken(token) {
 };
 
 var toggleDrawer = exports.toggleDrawer = function toggleDrawer(drawer) {
-
+  console.log("action - drawer: ", drawer);
   return {
     type: 'TOGGLE_DRAWER',
-    drawer: true
+    drawer: !drawer
   };
 };
 
@@ -40270,13 +40270,17 @@ var Home = function (_React$Component) {
   function Home(props) {
     _classCallCheck(this, Home);
 
-    return _possibleConstructorReturn(this, (Home.__proto__ || Object.getPrototypeOf(Home)).call(this, props));
+    var _this = _possibleConstructorReturn(this, (Home.__proto__ || Object.getPrototypeOf(Home)).call(this, props));
+
+    console.log(props);
+    _this.props = props;
+    return _this;
   }
 
   _createClass(Home, [{
     key: 'toggleDrawer',
     value: function toggleDrawer(props) {
-      var dispatch = props.dispatch;
+      var dispatch = this.props.dispatch;
 
       console.log("props....", props);
       console.log("dispatch....", dispatch);
@@ -40285,13 +40289,20 @@ var Home = function (_React$Component) {
   }, {
     key: 'render',
     value: function render() {
+      var _this2 = this;
+
+      var props = this.props;
+      var handleToggleDrawer = function handleToggleDrawer() {
+        _this2.toggleDrawer(props);
+      };
+
       return _react2.default.createElement(
         'div',
         null,
         _react2.default.createElement(_AppBar2.default, {
           title: 'Title',
           iconClassNameRight: 'muidocs-icon-navigation-expand-more',
-          onLeftIconButtonTouchTap: this.toggleDrawer(this.props)
+          onLeftIconButtonTouchTap: handleToggleDrawer
         }),
         _react2.default.createElement(
           _Drawer2.default,
@@ -56026,6 +56037,7 @@ var toggleDrawerReducer = exports.toggleDrawerReducer = function toggleDrawerRed
   var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
   var action = arguments[1];
 
+  console.log("reducer - state: ", state);
   switch (action.type) {
     case 'TOGGLE_DRAWER':
       return action.drawer;

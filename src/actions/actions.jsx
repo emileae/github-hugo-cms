@@ -8,10 +8,10 @@ export var setAuthToken = (token) => {
 };
 
 export var toggleDrawer = (drawer) => {
-
+  console.log("action - drawer: ", drawer);
   return {
     type: 'TOGGLE_DRAWER',
-    drawer: true
+    drawer: !drawer
   }
 
 };

@@ -15,22 +15,29 @@ class Home extends React.Component {
 
   constructor(props) {
     super(props);
+    console.log(props);
+    this.props = props;
   }
 
   toggleDrawer (props) {
-    var {dispatch} = props;
+    var {dispatch} = this.props;
     console.log("props....", props);
     console.log("dispatch....", dispatch);
     dispatch(actions.toggleDrawer(store.getState().drawer));
   }
 
   render() {
+    var props = this.props;
+    var handleToggleDrawer = () => {
+      this.toggleDrawer(props)
+    }
+
     return (
       <div>
         <AppBar
         title="Title"
         iconClassNameRight="muidocs-icon-navigation-expand-more"
-        onLeftIconButtonTouchTap={this.toggleDrawer(this.props)}
+        onLeftIconButtonTouchTap={handleToggleDrawer}
         />
         <Drawer open={store.getState().drawer}>
             <MenuItem>Menu Item</MenuItem>
