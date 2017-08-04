@@ -30,7 +30,7 @@ class Home extends React.Component {
         <AppBar
         title="Title"
         iconClassNameRight="muidocs-icon-navigation-expand-more"
-        onLeftIconButtonTouchTap={this.toggleDrawer}
+        onLeftIconButtonTouchTap={this.toggleDrawer(this.props)}
         />
         <Drawer open={store.getState().drawer}>
             <MenuItem>Menu Item</MenuItem>
@@ -42,4 +42,4 @@ class Home extends React.Component {
   }
 }
 
-export default connect(state => state, dispatch => ({ dispatch }))(Home);
+export default connect()(Home);

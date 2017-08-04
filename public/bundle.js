@@ -19583,16 +19583,16 @@ store.subscribe(function () {
 
 (0, _reactTapEventPlugin2.default)();
 
+// components
+
 
 var title = 'My Minimal React Webpack Babel Setup';
 
-var App = function App() {
-  return _react2.default.createElement(
-    _MuiThemeProvider2.default,
-    null,
-    _react2.default.createElement(_Home2.default, null)
-  );
-};
+// const MyApp = () => (
+//   <MuiThemeProvider>
+//     <Home />
+//   </MuiThemeProvider>
+// );
 
 _reactDom2.default.render(_react2.default.createElement(
   Provider,
@@ -19600,7 +19600,11 @@ _reactDom2.default.render(_react2.default.createElement(
   _react2.default.createElement(
     _reactRouterDom.HashRouter,
     null,
-    _react2.default.createElement(App, null)
+    _react2.default.createElement(
+      _MuiThemeProvider2.default,
+      null,
+      _react2.default.createElement(_Home2.default, null)
+    )
   )
 ), document.getElementById('app'));
 
@@ -40287,7 +40291,7 @@ var Home = function (_React$Component) {
         _react2.default.createElement(_AppBar2.default, {
           title: 'Title',
           iconClassNameRight: 'muidocs-icon-navigation-expand-more',
-          onLeftIconButtonTouchTap: this.toggleDrawer
+          onLeftIconButtonTouchTap: this.toggleDrawer(this.props)
         }),
         _react2.default.createElement(
           _Drawer2.default,
@@ -40311,11 +40315,7 @@ var Home = function (_React$Component) {
   return Home;
 }(_react2.default.Component);
 
-exports.default = connect(function (state) {
-  return state;
-}, function (dispatch) {
-  return { dispatch: dispatch };
-})(Home);
+exports.default = connect()(Home);
 
 /***/ }),
 /* 445 */

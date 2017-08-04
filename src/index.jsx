@@ -16,20 +16,24 @@ store.subscribe(()=> {
 import injectTapEventPlugin from 'react-tap-event-plugin';
 injectTapEventPlugin();
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+
+// components
 import Home from './components/Home.jsx';
 
 const title = 'My Minimal React Webpack Babel Setup';
 
-const App = () => (
-  <MuiThemeProvider>
-    <Home />
-  </MuiThemeProvider>
-);
+// const MyApp = () => (
+//   <MuiThemeProvider>
+//     <Home />
+//   </MuiThemeProvider>
+// );
 
 ReactDOM.render(
   <Provider store={store}>
     <HashRouter>
-      <App />
+      <MuiThemeProvider>
+        <Home />
+      </MuiThemeProvider>
     </HashRouter>
   </Provider>,
   document.getElementById('app')
