@@ -2,7 +2,7 @@ import React from 'react';
 
 // get redux connect
 var {connect} = require('react-redux');
-var store = require('configureStore').configure();// call the redux store...
+// var store = require('configureStore').configure();// call the redux store...
 var actions = require('actions');
 
 import AppBar from 'material-ui/AppBar';
@@ -15,22 +15,25 @@ class Home extends React.Component {
 
   constructor(props) {
     super(props);
-    console.log(props);
-    this.props = props;
   }
 
-  toggleDrawer (props) {
+  toggleDrawer (props, drawer) {
     var {dispatch} = this.props;
-    console.log("props....", props);
-    console.log("dispatch....", dispatch);
-    dispatch(actions.toggleDrawer(store.getState().drawer));
+    var drawerState = drawer;
+    console.log("drawerState....", drawerState);
+    dispatch(actions.toggleDrawer(drawerState));
   }
 
   render() {
     var props = this.props;
+
     var handleToggleDrawer = () => {
-      this.toggleDrawer(props)
+      console.log("props: ", props);
+      var drawer = props.drawer;
+      this.toggleDrawer(props, drawer);
     }
+
+    console.log("render props drawer: ", props.drawer);
 
     return (
       <div>
@@ -39,9 +42,13 @@ class Home extends React.Component {
         iconClassNameRight="muidocs-icon-navigation-expand-more"
         onLeftIconButtonTouchTap={handleToggleDrawer}
         />
-        <Drawer open={store.getState().drawer}>
-            <MenuItem>Menu Item</MenuItem>
-            <MenuItem>Menu Item 2</MenuItem>
+      <Drawer
+        open={props.drawer}
+        docked={false}
+        onRequestChange={handleToggleDrawer}
+      >
+            <MenuItem onClick={handleToggleDrawer}>Menu Item</MenuItem>
+            <MenuItem onClick={handleToggleDrawer}>Menu Item 2</MenuItem>
           </Drawer>
         <Login/>
       </div>
@@ -49,4 +56,4 @@ class Home extends React.Component {
   }
 }
 
-export default connect()(Home);
+export default connect(state => state)(Home);

@@ -10,8 +10,6 @@ store.subscribe(()=> {
   console.log("new state: ", store.getState());
 });
 
-// store.dispatch(actions.setAuthToken('asdfghgfdsfdgfhggf'));
-
 // material-ui
 import injectTapEventPlugin from 'react-tap-event-plugin';
 injectTapEventPlugin();

@@ -11573,6 +11573,7 @@ var setAuthToken = exports.setAuthToken = function setAuthToken(token) {
 
 var toggleDrawer = exports.toggleDrawer = function toggleDrawer(drawer) {
   console.log("action - drawer: ", drawer);
+  console.log("action - !drawer: ", !drawer);
   return {
     type: 'TOGGLE_DRAWER',
     drawer: !drawer
@@ -19576,8 +19577,6 @@ var store = __webpack_require__(230).configure(); // call the redux store...
 store.subscribe(function () {
   console.log("new state: ", store.getState());
 });
-
-// store.dispatch(actions.setAuthToken('asdfghgfdsfdgfhggf'));
 
 // material-ui
 
@@ -40260,8 +40259,9 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 // get redux connect
 var _require = __webpack_require__(137),
     connect = _require.connect;
+// var store = require('configureStore').configure();// call the redux store...
 
-var store = __webpack_require__(230).configure(); // call the redux store...
+
 var actions = __webpack_require__(140);
 
 var Home = function (_React$Component) {
@@ -40270,21 +40270,17 @@ var Home = function (_React$Component) {
   function Home(props) {
     _classCallCheck(this, Home);
 
-    var _this = _possibleConstructorReturn(this, (Home.__proto__ || Object.getPrototypeOf(Home)).call(this, props));
-
-    console.log(props);
-    _this.props = props;
-    return _this;
+    return _possibleConstructorReturn(this, (Home.__proto__ || Object.getPrototypeOf(Home)).call(this, props));
   }
 
   _createClass(Home, [{
     key: 'toggleDrawer',
-    value: function toggleDrawer(props) {
+    value: function toggleDrawer(props, drawer) {
       var dispatch = this.props.dispatch;
 
-      console.log("props....", props);
-      console.log("dispatch....", dispatch);
-      dispatch(actions.toggleDrawer(store.getState().drawer));
+      var drawerState = drawer;
+      console.log("drawerState....", drawerState);
+      dispatch(actions.toggleDrawer(drawerState));
     }
   }, {
     key: 'render',
@@ -40292,9 +40288,14 @@ var Home = function (_React$Component) {
       var _this2 = this;
 
       var props = this.props;
+
       var handleToggleDrawer = function handleToggleDrawer() {
-        _this2.toggleDrawer(props);
+        console.log("props: ", props);
+        var drawer = props.drawer;
+        _this2.toggleDrawer(props, drawer);
       };
+
+      console.log("render props drawer: ", props.drawer);
 
       return _react2.default.createElement(
         'div',
@@ -40306,15 +40307,19 @@ var Home = function (_React$Component) {
         }),
         _react2.default.createElement(
           _Drawer2.default,
-          { open: store.getState().drawer },
+          {
+            open: props.drawer,
+            docked: false,
+            onRequestChange: handleToggleDrawer
+          },
           _react2.default.createElement(
             _MenuItem2.default,
-            null,
+            { onClick: handleToggleDrawer },
             'Menu Item'
           ),
           _react2.default.createElement(
             _MenuItem2.default,
-            null,
+            { onClick: handleToggleDrawer },
             'Menu Item 2'
           )
         ),
@@ -40326,7 +40331,9 @@ var Home = function (_React$Component) {
   return Home;
 }(_react2.default.Component);
 
-exports.default = connect()(Home);
+exports.default = connect(function (state) {
+  return state;
+})(Home);
 
 /***/ }),
 /* 445 */
@@ -56037,9 +56044,9 @@ var toggleDrawerReducer = exports.toggleDrawerReducer = function toggleDrawerRed
   var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
   var action = arguments[1];
 
-  console.log("reducer - state: ", state);
   switch (action.type) {
     case 'TOGGLE_DRAWER':
+      console.log('drawer in reducer......', action.drawer);
       return action.drawer;
     default:
       return state;

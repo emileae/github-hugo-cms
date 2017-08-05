@@ -8,9 +8,9 @@ export var authTokenReducer = (state = '', action) => {
 };
 
 export var toggleDrawerReducer = (state = false, action) => {
-  console.log("reducer - state: ", state);
   switch (action.type) {
     case 'TOGGLE_DRAWER':
+      console.log('drawer in reducer......',action.drawer);
       return action.drawer;
     default:
       return state;
