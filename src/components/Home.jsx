@@ -1,4 +1,5 @@
 import React from 'react';
+import { Route, Link } from 'react-router-dom';
 
 // get redux connect
 var {connect} = require('react-redux');
@@ -42,15 +43,19 @@ class Home extends React.Component {
         iconClassNameRight="muidocs-icon-navigation-expand-more"
         onLeftIconButtonTouchTap={handleToggleDrawer}
         />
-      <Drawer
-        open={props.drawer}
-        docked={false}
-        onRequestChange={handleToggleDrawer}
-      >
-            <MenuItem onClick={handleToggleDrawer}>Menu Item</MenuItem>
-            <MenuItem onClick={handleToggleDrawer}>Menu Item 2</MenuItem>
-          </Drawer>
-        <Login/>
+            <Drawer
+              open={props.drawer}
+              docked={false}
+              onRequestChange={handleToggleDrawer}
+            >
+                  <MenuItem onClick={handleToggleDrawer}>
+                    <Link to={`/login`}>Login</Link>
+                  </MenuItem>
+                  <MenuItem onClick={handleToggleDrawer}>
+                    <Link to={`/`}>Home</Link>
+                  </MenuItem>
+            </Drawer>
+        <Route path="/login" component={Login} />
       </div>
     )
   }

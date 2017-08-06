@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 var {Provider} = require('react-redux');
-import { HashRouter } from 'react-router-dom';// use HashRouter since this is a static site, browserrouter is for server rendered sites
+import { BrowserRouter } from 'react-router-dom';
 
 var actions = require('actions');
 var store = require('configureStore').configure();// call the redux store...
@@ -28,11 +28,11 @@ const title = 'My Minimal React Webpack Babel Setup';
 
 ReactDOM.render(
   <Provider store={store}>
-    <HashRouter>
+    <BrowserRouter>
       <MuiThemeProvider>
         <Home />
       </MuiThemeProvider>
-    </HashRouter>
+    </BrowserRouter>
   </Provider>,
   document.getElementById('app')
 );
