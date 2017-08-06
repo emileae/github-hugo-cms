@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 var {Provider} = require('react-redux');
-import { BrowserRouter } from 'react-router-dom';
+import { HashRouter as Router } from 'react-router-dom';
 
 var actions = require('actions');
 var store = require('configureStore').configure();// call the redux store...
@@ -28,11 +28,11 @@ const title = 'My Minimal React Webpack Babel Setup';
 
 ReactDOM.render(
   <Provider store={store}>
-    <BrowserRouter>
+    <Router>
       <MuiThemeProvider>
         <Home />
       </MuiThemeProvider>
-    </BrowserRouter>
+    </Router>
   </Provider>,
   document.getElementById('app')
 );

@@ -11572,12 +11572,21 @@ var setAuthToken = exports.setAuthToken = function setAuthToken(token) {
 };
 
 var toggleDrawer = exports.toggleDrawer = function toggleDrawer(drawer) {
-  console.log("action - drawer: ", drawer);
-  console.log("action - !drawer: ", !drawer);
   return {
     type: 'TOGGLE_DRAWER',
     drawer: !drawer
   };
+};
+
+var setContentList = exports.setContentList = function setContentList(contentKey, content) {
+  console.log("dispatched action: setContentList - - - - -");
+  var actionObject = {
+    type: 'SET_CONTENT_LIST',
+    key: contentKey
+  };
+  actionObject[contentKey] = content;
+  console.log("actionObject: ", actionObject);
+  return actionObject;
 };
 
 /***/ }),
@@ -19565,7 +19574,7 @@ _reactDom2.default.render(_react2.default.createElement(
   Provider,
   { store: store },
   _react2.default.createElement(
-    _reactRouterDom.BrowserRouter,
+    _reactRouterDom.HashRouter,
     null,
     _react2.default.createElement(
       _MuiThemeProvider2.default,
@@ -40218,6 +40227,10 @@ var _Login = __webpack_require__(493);
 
 var _Login2 = _interopRequireDefault(_Login);
 
+var _PostList = __webpack_require__(573);
+
+var _PostList2 = _interopRequireDefault(_PostList);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -40299,9 +40312,19 @@ var Home = function (_React$Component) {
               { to: '/' },
               'Home'
             )
+          ),
+          _react2.default.createElement(
+            _MenuItem2.default,
+            { onClick: handleToggleDrawer },
+            _react2.default.createElement(
+              _reactRouterDom.Link,
+              { to: '/posts' },
+              'Posts'
+            )
           )
         ),
-        _react2.default.createElement(_reactRouterDom.Route, { path: '/login', component: _Login2.default })
+        _react2.default.createElement(_reactRouterDom.Route, { path: '/login', component: _Login2.default }),
+        _react2.default.createElement(_reactRouterDom.Route, { path: '/posts', component: _PostList2.default })
       );
     }
   }]);
@@ -48069,11 +48092,17 @@ var Login = function (_React$Component) {
   }, {
     key: 'render',
     value: function render() {
+      var _this2 = this;
+
+      var handleGithubLogin = function handleGithubLogin() {
+        _this2.githubLogin(_this2.props);
+      };
+
       console.log("props: ", this.props);
       return _react2.default.createElement(
         'div',
         null,
-        _react2.default.createElement(_RaisedButton2.default, { label: 'Github Login', onClick: this.githubLogin(this.props) }),
+        _react2.default.createElement(_RaisedButton2.default, { label: 'Github Login', onClick: handleGithubLogin }),
         _react2.default.createElement('br', null),
         _react2.default.createElement(_RaisedButton2.default, { label: 'Test Github API', onClick: testGithubAPI }),
         _react2.default.createElement('br', null),
@@ -56006,17 +56035,36 @@ function verifySubselectors(mapStateToProps, mapDispatchToProps, mergeProps, dis
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.configure = undefined;
+
+var _ContentSettings = __webpack_require__(574);
+
 var redux = __webpack_require__(223);
 
 var _require = __webpack_require__(571),
     authTokenReducer = _require.authTokenReducer,
-    toggleDrawerReducer = _require.toggleDrawerReducer;
+    toggleDrawerReducer = _require.toggleDrawerReducer,
+    setContentListReducer = _require.setContentListReducer;
+
+// describes the structure of the content... may be different for different hugo projects
 
 var configure = exports.configure = function configure() {
-  var reducer = redux.combineReducers({
+  var combineReducerObject = {
     token: authTokenReducer,
-    drawer: toggleDrawerReducer
-  });
+    drawer: toggleDrawerReducer,
+    post: setContentListReducer
+
+    // for (var i=0; i<contents.length; i++){
+    //   // combineReducerObject[contents[i]] = setContentListReducer[contents[i]];
+    //   setContentListReducer[contents[i]] === undefined ? combineReducerObject[contents[i]] = [] : combineReducerObject[contents[i]] = combineReducerObject[contents[i]];
+    // };
+    // console.log("combineReducerObject: ", combineReducerObject);
+
+    // the setContentListReducer is dynamic, it may set a number of different state keys, like 'posts' or 'pages'... some content list
+    // combineReducerObject[setContentListReducer['key']] = setContentListReducer[setContentListReducer['key']];
+
+
+  };var reducer = redux.combineReducers(combineReducerObject);
 
   // TODO: fix these dev tools
   var store = redux.createStore(reducer, redux.compose(window.devToolsExtension ? window.devToolsExtension() : function (f) {
@@ -56036,6 +56084,19 @@ var configure = exports.configure = function configure() {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.setContentListReducer = exports.toggleDrawerReducer = exports.authTokenReducer = undefined;
+
+var _ContentSettings = __webpack_require__(574);
+
+// describes the structure of the content... may be different for different hugo projects
+
+// create the default contents state
+var defaultContents = {};
+for (var i = 0; i < _ContentSettings.contents.length; i++) {
+  defaultContents[_ContentSettings.contents[i]] = [];
+};
+console.log("defaultContents: ", defaultContents);
+
 var authTokenReducer = exports.authTokenReducer = function authTokenReducer() {
   var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
   var action = arguments[1];
@@ -56054,12 +56115,174 @@ var toggleDrawerReducer = exports.toggleDrawerReducer = function toggleDrawerRed
 
   switch (action.type) {
     case 'TOGGLE_DRAWER':
-      console.log('drawer in reducer......', action.drawer);
       return action.drawer;
     default:
       return state;
   }
 };
+
+// export var setContentListReducer = (state = defaultContents, action) => {
+var setContentListReducer = exports.setContentListReducer = function setContentListReducer() {
+  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+  var action = arguments[1];
+
+  console.log("----set content list reducer: ", action);
+  switch (action.type) {
+    case 'SET_CONTENT_LIST':
+      // var newContentState = {content: {
+      //   post: action[action.key]
+      // }};
+      // // newContentState["content"][action.key] = action[action.key];// these keys are based on settings/ContentSettings.js
+      // console.log("new content state: ", newContentState);
+      // return newContentState;
+
+      // return Object.assign({}, state, {
+      //   post: action[action.key]
+      // });
+
+      return action.post;
+
+    default:
+      return state;
+  }
+};
+
+/***/ }),
+/* 572 */,
+/* 573 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(1);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _firebase = __webpack_require__(496);
+
+var _firebase2 = _interopRequireDefault(_firebase);
+
+var _axios = __webpack_require__(527);
+
+var _axios2 = _interopRequireDefault(_axios);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+// get redux connect
+var _require = __webpack_require__(137),
+    connect = _require.connect;
+
+var actions = __webpack_require__(140);
+
+// extras
+
+var base64 = __webpack_require__(569); /// need base64 to decode github repo data
+
+var PostList = function (_React$Component) {
+  _inherits(PostList, _React$Component);
+
+  function PostList(props) {
+    _classCallCheck(this, PostList);
+
+    return _possibleConstructorReturn(this, (PostList.__proto__ || Object.getPrototypeOf(PostList)).call(this, props));
+  }
+
+  _createClass(PostList, [{
+    key: 'fetchContent',
+    value: function fetchContent(props) {
+      var token = props.token,
+          dispatch = props.dispatch;
+
+      _axios2.default.get('https://api.github.com/repos/emileae/hugo-sample-site/contents/content/post?access_token=' + token).then(function (response) {
+        console.log(response);
+        dispatch(actions.setContentList('post', response.data));
+        // var decodedData = base64.decode(response.data.content);
+        // console.log(response.data.content);
+        // console.log(decodedData);
+        console.log(response.statusCode); // 200
+      });
+    }
+
+    // call this to get the data to populate the page
+
+  }, {
+    key: 'componentWillMount',
+    value: function componentWillMount() {
+      this.fetchContent(this.props);
+      console.log("props: ", this.props);
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+
+      var posts = this.props.post; // list of post titles and github info
+
+      var renderPosts = function renderPosts() {
+        if (posts.length === 0) {
+          return _react2.default.createElement(
+            'p',
+            { className: 'container__message' },
+            'No posts.'
+          );
+        }
+        return posts.map(function (post) {
+          return _react2.default.createElement(
+            'li',
+            null,
+            post.name
+          );
+        });
+      };
+
+      return _react2.default.createElement(
+        'div',
+        null,
+        _react2.default.createElement(
+          'p',
+          null,
+          'Post List'
+        ),
+        _react2.default.createElement(
+          'ul',
+          null,
+          renderPosts()
+        )
+      );
+    }
+  }]);
+
+  return PostList;
+}(_react2.default.Component);
+
+exports.default = connect(function (state) {
+  return state;
+})(PostList);
+
+/***/ }),
+/* 574 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+// this describes the content folder in the hugo project
+var contents = exports.contents = ['post'];
 
 /***/ })
 /******/ ]);

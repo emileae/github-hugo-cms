@@ -11,6 +11,7 @@ import Drawer from 'material-ui/Drawer';
 import MenuItem from 'material-ui/MenuItem';
 
 import Login from './Login.jsx';
+import PostList from './PostList.jsx';
 
 class Home extends React.Component {
 
@@ -54,8 +55,12 @@ class Home extends React.Component {
                   <MenuItem onClick={handleToggleDrawer}>
                     <Link to={`/`}>Home</Link>
                   </MenuItem>
+                  <MenuItem onClick={handleToggleDrawer}>
+                    <Link to={`/posts`}>Posts</Link>
+                  </MenuItem>
             </Drawer>
         <Route path="/login" component={Login} />
+        <Route path="/posts" component={PostList} />
       </div>
     )
   }

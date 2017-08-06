@@ -128,10 +128,15 @@ class Login extends React.Component {
   }
 
   render() {
+
+    var handleGithubLogin = () => {
+      this.githubLogin(this.props);
+    }
+
     console.log("props: ", this.props);
     return (
       <div>
-      <RaisedButton label="Github Login" onClick={this.githubLogin(this.props)} />
+      <RaisedButton label="Github Login" onClick={handleGithubLogin} />
         <br></br>
         <RaisedButton label="Test Github API" onClick={testGithubAPI} />
         <br></br>
