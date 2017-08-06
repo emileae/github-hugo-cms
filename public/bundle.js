@@ -40231,6 +40231,10 @@ var _PostList = __webpack_require__(573);
 
 var _PostList2 = _interopRequireDefault(_PostList);
 
+var _Post = __webpack_require__(575);
+
+var _Post2 = _interopRequireDefault(_Post);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -40321,10 +40325,20 @@ var Home = function (_React$Component) {
               { to: '/posts' },
               'Posts'
             )
+          ),
+          _react2.default.createElement(
+            _MenuItem2.default,
+            { onClick: handleToggleDrawer },
+            _react2.default.createElement(
+              _reactRouterDom.Link,
+              { to: '/post/0' },
+              'Post 0'
+            )
           )
         ),
         _react2.default.createElement(_reactRouterDom.Route, { path: '/login', component: _Login2.default }),
-        _react2.default.createElement(_reactRouterDom.Route, { path: '/posts', component: _PostList2.default })
+        _react2.default.createElement(_reactRouterDom.Route, { path: '/posts', component: _PostList2.default }),
+        _react2.default.createElement(_reactRouterDom.Route, { path: '/post/:postIndex', component: _Post2.default })
       );
     }
   }]);
@@ -56165,6 +56179,8 @@ var _react = __webpack_require__(1);
 
 var _react2 = _interopRequireDefault(_react);
 
+var _reactRouterDom = __webpack_require__(330);
+
 var _firebase = __webpack_require__(496);
 
 var _firebase2 = _interopRequireDefault(_firebase);
@@ -56172,6 +56188,10 @@ var _firebase2 = _interopRequireDefault(_firebase);
 var _axios = __webpack_require__(527);
 
 var _axios2 = _interopRequireDefault(_axios);
+
+var _Post = __webpack_require__(575);
+
+var _Post2 = _interopRequireDefault(_Post);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -56190,6 +56210,8 @@ var actions = __webpack_require__(140);
 // extras
 
 var base64 = __webpack_require__(569); /// need base64 to decode github repo data
+
+// supplementary components
 
 var PostList = function (_React$Component) {
   _inherits(PostList, _React$Component);
@@ -56238,11 +56260,15 @@ var PostList = function (_React$Component) {
             'No posts.'
           );
         }
-        return posts.map(function (post) {
+        return posts.map(function (post, idx) {
           return _react2.default.createElement(
             'li',
-            null,
-            post.name
+            { key: 'list-' + idx },
+            _react2.default.createElement(
+              _reactRouterDom.Link,
+              { key: 'link-' + idx, to: '/post/' + idx },
+              post.name
+            )
           );
         });
       };
@@ -56283,6 +56309,109 @@ Object.defineProperty(exports, "__esModule", {
 });
 // this describes the content folder in the hugo project
 var contents = exports.contents = ['post'];
+
+/***/ }),
+/* 575 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(1);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactRouterDom = __webpack_require__(330);
+
+var _firebase = __webpack_require__(496);
+
+var _firebase2 = _interopRequireDefault(_firebase);
+
+var _axios = __webpack_require__(527);
+
+var _axios2 = _interopRequireDefault(_axios);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+// get redux connect
+var _require = __webpack_require__(137),
+    connect = _require.connect;
+// var store = require('configureStore').configure();// call the redux store...
+
+
+var actions = __webpack_require__(140);
+
+var Post = function (_React$Component) {
+  _inherits(Post, _React$Component);
+
+  function Post(props) {
+    _classCallCheck(this, Post);
+
+    return _possibleConstructorReturn(this, (Post.__proto__ || Object.getPrototypeOf(Post)).call(this, props));
+  }
+
+  _createClass(Post, [{
+    key: 'fetchContent',
+    value: function fetchContent(props) {
+
+      var posts = props.post; // list of post titles and github info
+      var postIndex = props.match.params.postIndex;
+      var token = props.token,
+          dispatch = props.dispatch;
+
+
+      _axios2.default.get(posts[postIndex].download_url + '?access_token=' + token).then(function (response) {
+        console.log("........ got markdown content???");
+        console.log(response);
+        // dispatch(actions.setContentList('post', response.data));
+        // var decodedData = base64.decode(response.data.content);
+        // console.log(response.data.content);
+        // console.log(decodedData);
+        console.log(response.statusCode); // 200
+      });
+    }
+
+    // call this to get the data to populate the page
+
+  }, {
+    key: 'componentWillMount',
+    value: function componentWillMount() {
+      this.fetchContent(this.props);
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+
+      return _react2.default.createElement(
+        'div',
+        null,
+        _react2.default.createElement(
+          'p',
+          null,
+          'hello post page...'
+        )
+      );
+    }
+  }]);
+
+  return Post;
+}(_react2.default.Component);
+
+exports.default = connect(function (state) {
+  return state;
+})(Post);
 
 /***/ })
 /******/ ]);

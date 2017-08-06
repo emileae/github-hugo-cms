@@ -1,4 +1,5 @@
 import React from 'react';
+import { Route, Link } from 'react-router-dom';
 
 // get redux connect
 var {connect} = require('react-redux');
@@ -9,6 +10,9 @@ import firebase from './../firebase';
 import githubProvider from './../firebase';
 import axios from 'axios';
 var base64 = require('base-64');/// need base64 to decode github repo data
+
+// supplementary components
+import Post from './Post.jsx';
 
 class PostList extends React.Component {
 
@@ -48,9 +52,13 @@ class PostList extends React.Component {
           </p>
         )
       }
-      return posts.map((post) => {
+      return posts.map((post, idx) => {
         return (
-          <li>{post.name}</li>
+          <li key={`list-${idx}`}>
+            <Link key={`link-${idx}`} to={`/post/${idx}`}>
+              {post.name}
+            </Link>
+            </li>
         );
       })
     };
